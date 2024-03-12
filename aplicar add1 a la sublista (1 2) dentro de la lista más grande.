@@ -1,0 +1,14 @@
+;Justin Martínez Molina
+; Definición de la función agregar1 para trabajar con listas
+(define (agregar1 lista)
+  (map add1 lista))
+
+; Definición de un valor opcional
+(define valor-opcional '(solo (1 2) 5 6 7))
+
+; Aplicación de la función agregar1 a los elementos de la lista
+(define resultado-opcional (agregar1 (car (cdr valor-opcional))))
+
+; El resultado es un nuevo functor (valor opcional) con el elemento modificado
+; Output: '(2 3)
+(display resultado-opcional)
