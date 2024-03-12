@@ -1,0 +1,95 @@
+; Definición de un tipo de dato abstracto: Functor
+(define-struct (functor a) (data))
+
+; Función de mapeo homogéneo: Aplica una función a todos los elementos independientemente de la estructura interna
+(define (map-homogeneo f functor)
+  (make-functor (map f (functor-data functor))))
+
+; Función de abstracción de datos: Permite operar con datos de manera abstracta
+(define (operar-con-datos abstracto)
+  (define datos (functor-data abstracto))
+  ; Realizar alguna operación abstracta sin preocuparse por la implementación interna
+  (foldl + 0 datos))
+
+; Función de composición de funciones: Combina dos funciones para manipular datos
+(define (componer-funciones f g x)
+  (f (g x)))
+
+; Leyes de funtores: Identidad y composición
+(define (leyes-de-funtores functor)
+  (define datos (functor-data functor))
+  ; Ley de identidad: map identidad x debe ser equivalente a x
+  (equal? (map identity datos) datos)
+  ; Ley de composición: map (componer f g) x debe ser equivalente a (map f (map g x))
+  (equal? (map (lambda (x) (* 2 x)) datos) (map (lambda (x) (add1 (* 2 x))) (map (lambda (x) x) datos))))
+
+; Función de aplicación a elementos opcionales: Aplica una función a elementos opcionales manejando valores nulos o envueltos
+(define (aplicar-a-elementos-opcionales f opcion)
+  (if (not (null? opcion))
+      (list (f (car opcion)))
+      '()))
+
+; Versatilidad estructural: Representación de diversos tipos de datos (listas y conjuntos)
+(define (versatilidad-estructural tipo-de-dato)
+  (cond
+    ((equal? tipo-de-dato 'lista)
+     (make-functor (list 1 2 3)))
+    ((equal? tipo-de-dato 'conjunto)
+     (make-functor (list 3 1 2)))))
+
+; Inmutabilidad y compatibilidad con monoides: Functor inmutable y compatibilidad con la operación de suma
+(define (crear-functor-inmutable)
+  (make-immutable-functor '(1 2 3)))
+
+(define (concatenar-funtores functor1 functor2)
+  (make-immutable-functor (append (functor-data functor1) (functor-data functor2))))
+
+; Transparencia referencial: Mantener la transparencia referencial al aplicar funciones puras a los datos contenidos
+(define (transparencia-referencial functor)
+  (make-functor (map add1 (functor-data functor))))
+
+; Evaluación perezosa: Representación de una secuencia infinita de valores
+(define (secuencia-infinita inicio)
+  (make-functor (let loop ((n inicio))
+                  (cons n (delay (loop (add1 n)))))))
+
+; Ejemplo de uso de las funciones y características mencionadas:
+(define datos-abstractos (make-functor '(1 2 3)))
+
+; Función de mapeo homogéneo
+(define datos-modificados (map-homogeneo add1 datos-abstractos))
+(displayln datos-modificados)
+
+; Operación con datos abstractos sin preocuparse por la implementación interna
+(define resultado-operacion (operar-con-datos datos-abstractos))
+(displayln resultado-operacion)
+
+; Composición de funciones
+(define resultado-composicion (componer-funciones add1 square 3))
+(displayln resultado-composicion)
+
+; Leyes de funtores
+(define cumplimiento-leyes (leyes-de-funtores datos-abstractos))
+(displayln cumplimiento-leyes)
+
+; Aplicación a elementos opcionales
+(define resultado-aplicacion-opcional (aplicar-a-elementos-opcionales add1 '(2)))
+(displayln resultado-aplicacion-opcional)
+
+; Versatilidad estructural
+(define lista-functor (versatilidad-estructural 'lista))
+(displayln (functor-data lista-functor))
+
+; Inmutabilidad y compatibilidad con monoides
+(define functor-inmutable1 (crear-functor-inmutable))
+(define functor-inmutable2 (crear-functor-inmutable))
+(define resultado-concatenacion (concatenar-funtores functor-inmutable1 functor-inmutable2))
+(displayln (functor-data resultado-concatenacion))
+
+; Transparencia referencial
+(define datos-transparentes (transparencia-referencial datos-abstractos))
+(displayln (functor-data datos-transparentes))
+
+; Evaluación perezosa
+(define secuencia (secuencia-infinita 1))
+(displayln (take (functor-data secuencia) 5))
