@@ -1,0 +1,37 @@
+;Resultado #1
+; Definición del functor
+(define-struct functor (data))
+(define datos (make-functor '(1 2 3 4 5)))
+; Fold (reduce): Sumar todos los elementos del functor
+(define (sumar-elementos functor)
+  ; Utiliza foldl para sumar todos los elementos de la lista
+  (foldl + 0 (functor-data functor)))
+; Imprime el resultado
+(displayln (sumar-elementos datos)) ; Output: 15
+
+
+;Resultado #2
+; Filter: Filtrar solo los números pares del functor
+(define (filtrar-pares functor)
+  ; Utiliza filter para seleccionar solo los elementos pares de la lista
+  (make-functor (filter even? (functor-data functor))))
+; Imprime el resultado
+(displayln (functor-data (filtrar-pares datos))) ; Output: '(2 4)
+
+;Resultado #3
+; FoldMap (map-reduce): Calcular la suma de los cuadrados de los elementos
+(define (suma-cuadrados functor)
+  ; Utiliza map y foldl para calcular la suma de los cuadrados de los elementos
+  (foldl + 0 (map (lambda (x) (* x x)) (functor-data functor))))
+; Imprime el resultado
+(displayln (suma-cuadrados datos)) ; Output: 55
+
+;Resultado #4
+; Aplicación punto a punto: Sumar dos funtores de la misma longitud
+(define (sumar-funtores functor1 functor2)
+  ; Utiliza map para sumar punto a punto los elementos de los dos funtores
+  (make-functor (map + (functor-data functor1) (functor-data functor2))))
+; Definición de un segundo functor
+(define datos2 (make-functor '(10 20 30 40 50)))
+; Imprime el resultado
+(displayln (functor-data (sumar-funtores datos datos2))) ; Output: '(11 22 33 44 55)
